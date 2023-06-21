@@ -1,10 +1,51 @@
-from data_loader import load_data
-from data_preprocessing import preprocess_data
-from display import display_recommendations
-from game_recommendations import calculate_mean_rating, calculate_score, filter_games, get_game_recommendations
-import tkinter as tk
+from datetime import datetime
+import pandas as pd
 
-# Carregar os dados
+def load_data():
+    url = 'https://drive.google.com/uc?export=download&id=1SdCK7a5E9_vQKTEmMtEROrq-LBsKlTPE'
+    data = pd.read_csv(url, dtype={'id': str}, low_memory=False)
+    return data
+
+def preprocess_data(data):
+    data['positive_ratings'] = pd.to_numeric(data['positive_ratings'], errors='coerce')
+    data['negative_ratings'] = pd.to_numeric(data['negative_ratings'], errors='coerce')
+    data.dropna(subset=['positive_ratings', 'negative_ratings'], inplace=True)
+    return data
+
+def calculate_mean_rating(data):
+    mean_rating = data['positive_ratings'].mean()
+    return mean_rating
+
+def calculate_score(row, mean_rating, m):
+    v = row['positive_ratings']
+    r = row['negative_ratings']
+    return (v / (v + m) * r) + (m / (m + v) * mean_rating)
+
+def filter_games(data, m):
+    filtered_games = data[data['positive_ratings'] >= m].copy()
+    return filtered_games
+
+def get_game_recommendations(data, filtered_games, title=None, genre=None, top_n=60, price=None, release_date=None, platforms=None):
+    games = filtered_games.copy()
+
+    if title:
+        games = games[games['name'].str.contains(title, case=False)]
+    if genre:
+        games = games[games['genres'].str.contains(genre, case=False)]
+    if price is not None:
+        games = games[games['price'] <= price]
+    if release_date is not None:
+        release_date = datetime.strptime(release_date, '%Y-%m-%d').date()
+        games = games[pd.to_datetime(games['release_date']).dt.date >= release_date]
+    if platforms:
+        games = games[games['platforms'].str.contains(platforms, case=False)]
+
+    games = games.sort_values('score', ascending=False)
+    recommendations = games[['name', 'price']].head(top_n)
+    return recommendations
+
+#================================================================================
+
 data = load_data()
 data = preprocess_data(data)
 m = data['positive_ratings'].quantile(0.70)
@@ -12,49 +53,5 @@ filtered_games = filter_games(data, m)
 mean_rating = calculate_mean_rating(data)
 filtered_games['score'] = filtered_games.apply(calculate_score, args=(mean_rating, m), axis=1)
 
-def search_button_click():
-    title = entry_title.get()
-    genre = entry_genre.get()
-    price = float(entry_price.get()) if entry_price.get() else None
-    release_date = entry_release_date.get()
-    platforms = entry_platforms.get()
-
-    recommendations = get_game_recommendations(data, filtered_games, title=title, genre=genre, top_n=10, price=price,
-                                               release_date=release_date, platforms=platforms)
-    print(recommendations)
-    display_recommendations(recommendations)
-
-
-# Criar a interface gráfica
-root = tk.Tk()
-root.title("Recomendação de Jogos")
-
-# Labels e entry boxes para os critérios de busca
-label_title = tk.Label(root, text="Título do Jogo:")
-entry_title = tk.Entry(root)
-label_genre = tk.Label(root, text="Gênero do Jogo:")
-entry_genre = tk.Entry(root)
-label_price = tk.Label(root, text="Preço Máximo:")
-entry_price = tk.Entry(root)
-label_release_date = tk.Label(root, text="Data de Lançamento (YYYY-MM-DD):")
-entry_release_date = tk.Entry(root)
-label_platforms = tk.Label(root, text="Plataformas:")
-entry_platforms = tk.Entry(root)
-
-# Botão de busca
-search_button = tk.Button(root, text="Buscar", command=search_button_click)
-
-# Posicionar os elementos na interface
-label_title.grid(row=0, column=0, sticky="e")
-entry_title.grid(row=0, column=1)
-label_genre.grid(row=1, column=0, sticky="e")
-entry_genre.grid(row=1, column=1)
-label_price.grid(row=2, column=0, sticky="e")
-entry_price.grid(row=2, column=1)
-label_release_date.grid(row=3, column=0, sticky="e")
-entry_release_date.grid(row=3, column=1)
-label_platforms.grid(row=4, column=0, sticky="e")
-entry_platforms.grid(row=4, column=1)
-search_button.grid(row=5, column=0, columnspan=2)
-
-root.mainloop()
+recommendations = get_game_recommendations(data, filtered_games, genre='Action')
+print(recommendations)
