@@ -47,5 +47,6 @@ print(data.sample(10))
 caminho_arquivo = 'steam.csv'
 data.to_csv(caminho_arquivo, index=False)
 
-# Observação: Este é um exemplo simples para fins ilustrativos
-# e pode não abranger todas as possíveis operações de tratamento de dados.
+# Obs: Este é um exemplo simples para fins ilustrativos e não abranger
+# todas as possíveis operações de tratamento de dados, sendo apenas para
+# melhorar a capacidade de operação de consulta do usuário.

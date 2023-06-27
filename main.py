@@ -2,9 +2,9 @@ from game_recommendation_system import GameRecommendationSystem
 from user_input import get_user_inputs, clear_screen, get_user_inputs_id
 
 # Uso da classe GameRecommendationSystem
-data_url = 'https://drive.google.com/uc?export=download&id=1SdCK7a5E9_vQKTEmMtEROrq-LBsKlTPE'
+data = '/Tratamento/steam.csv'
 
-game_system = GameRecommendationSystem(data_url)
+game_system = GameRecommendationSystem(data)
 clear_screen()
 
 try:
