@@ -46,7 +46,7 @@ class GameRecommendationSystem:
     @lru_cache(maxsize=None)
     def get_game_recommendations(self, title=None, genre=None, top_n=None, price=None, release_date=None, platforms=None):
         if top_n is not None and (not isinstance(top_n, int) or top_n <= 0):
-            raise ValueError("O valor de 'top_n' deve ser um número inteiro positivo.")
+            raise ValueError("O número de recomendações deve ser um número inteiro positivo.")
 
         filtered_games = self.filter_games()
 
