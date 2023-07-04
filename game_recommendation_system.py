@@ -65,9 +65,5 @@ class GameRecommendationSystem:
         mean_rating = self.calculate_mean_rating()
         filtered_games['score'] = filtered_games.apply(self.calculate_score, args=(mean_rating,), axis=1)
 
-        recommendations = filtered_games.sort_values('score', ascending=False)[['Nome']].head(top_n or self.TOP_N_RECOMMENDATIONS)
+        recommendations = filtered_games.sort_values('score', ascending=False)[['Nome', 'Preço', 'Data de Lançamento', 'Plataformas', 'Gêneros']].head(top_n or self.TOP_N_RECOMMENDATIONS)
         return recommendations
-
-    def get_game_details(self, game_id):
-        game = self.data[self.data['appid'] == game_id]
-        return game[['Nome', 'Preço', 'Data de Lançamento', 'Plataforma', 'Gêneros']]
