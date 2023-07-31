@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 from tkinter import messagebox
 from user_input import get_user_inputs, get_user_inputs_id
 from game_recommendation_system import GameRecommendationSystem
@@ -30,6 +31,21 @@ class GameRecommendationApp:
 
         self.recommend_button = tk.Button(root, text="Recomendar", command=self.get_recommendations)
 
+        # Tabela para exibir as recomendações
+        self.recommendations_table = ttk.Treeview(root, columns=("Nome", "Preço", "Data de Lançamento", "Plataformas", "Gêneros"))
+        self.recommendations_table.heading("Nome", text="Nome")
+        self.recommendations_table.heading("Preço", text="Preço")
+        self.recommendations_table.heading("Data de Lançamento", text="Data de Lançamento")
+        self.recommendations_table.heading("Plataformas", text="Plataformas")
+        self.recommendations_table.heading("Gêneros", text="Gêneros")
+
+        self.recommendations_table.column("#0", width=0)
+        self.recommendations_table.column("Nome", anchor=tk.W, width=230)
+        self.recommendations_table.column("Preço", anchor=tk.CENTER, width=100)
+        self.recommendations_table.column("Data de Lançamento", anchor=tk.CENTER, width=120)
+        self.recommendations_table.column("Plataformas", anchor=tk.W, width=150)
+        self.recommendations_table.column("Gêneros", anchor=tk.W, width=350)
+
         # Posicionar os elementos na interface
         self.title_label.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
         self.title_entry.grid(row=0, column=1, padx=5, pady=5)
@@ -50,6 +66,8 @@ class GameRecommendationApp:
         self.platforms_entry.grid(row=5, column=1, padx=5, pady=5)
 
         self.recommend_button.grid(row=6, column=0, columnspan=2, padx=5, pady=10)
+
+        self.recommendations_table.grid(row=7, column=0, columnspan=2, padx=5, pady=10)
 
     def get_recommendations(self):
         try:
@@ -76,12 +94,19 @@ class GameRecommendationApp:
                 platforms=platforms
             )
 
-            # Mostrar as recomendações em uma caixa de mensagem
-            if recommendations.empty:
-                messagebox.showinfo("Recomendações", "Nenhum jogo encontrado com os critérios informados.")
-            else:
-                recommendations_text = "Recomendações:\n" + recommendations.to_string(index=False)
-                messagebox.showinfo("Recomendações", recommendations_text)
+            # Limpar a tabela antes de adicionar as novas recomendações
+            self.recommendations_table.delete(*self.recommendations_table.get_children())
+
+            # Adicionar as recomendações na tabela
+            for index, row in recommendations.iterrows():
+                self.recommendations_table.insert("", "end", text="", values=(
+                    row['Nome'],
+                    row['Preço'],
+                    row['Data de Lançamento'],
+                    row['Plataformas'],
+                    row['Gêneros']
+                ))
+
         except ValueError as e:
             messagebox.showerror("Erro", str(e))
 
