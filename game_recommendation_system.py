@@ -7,8 +7,8 @@ import requests
 
 
 class GameRecommendationSystem:
-    QUANTILE = 0.70
-    TOP_N_RECOMMENDATIONS = 5
+    QUANTILE = 0.65
+    TOP_N_RECOMMENDATIONS = 50
 
     def __init__(self, data_url):
         self.data = self.load_data(data_url)

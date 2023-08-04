@@ -44,26 +44,26 @@ class GameRecommendationApp:
         self.recommendations_table.column("Preço", anchor=tk.CENTER, width=100)
         self.recommendations_table.column("Data de Lançamento", anchor=tk.CENTER, width=120)
         self.recommendations_table.column("Plataformas", anchor=tk.W, width=150)
-        self.recommendations_table.column("Gêneros", anchor=tk.W, width=350)
+        self.recommendations_table.column("Gêneros", anchor=tk.W, width=400)
 
         # Posicionar os elementos na interface
         self.title_label.grid(row=0, column=0, padx=5, pady=5, sticky=tk.W)
-        self.title_entry.grid(row=0, column=1, padx=5, pady=5)
+        self.title_entry.grid(row=0, column=0, padx=5, pady=5)
 
         self.genre_label.grid(row=1, column=0, padx=5, pady=5, sticky=tk.W)
-        self.genre_entry.grid(row=1, column=1, padx=5, pady=5)
+        self.genre_entry.grid(row=1, column=0, padx=5, pady=5)
 
         self.top_n_label.grid(row=2, column=0, padx=5, pady=5, sticky=tk.W)
-        self.top_n_entry.grid(row=2, column=1, padx=5, pady=5)
+        self.top_n_entry.grid(row=2, column=0, padx=5, pady=5)
 
         self.price_label.grid(row=3, column=0, padx=5, pady=5, sticky=tk.W)
-        self.price_entry.grid(row=3, column=1, padx=5, pady=5)
+        self.price_entry.grid(row=3, column=0, padx=5, pady=5)
 
         self.release_date_label.grid(row=4, column=0, padx=5, pady=5, sticky=tk.W)
-        self.release_date_entry.grid(row=4, column=1, padx=5, pady=5)
+        self.release_date_entry.grid(row=4, column=0, padx=5, pady=5)
 
         self.platforms_label.grid(row=5, column=0, padx=5, pady=5, sticky=tk.W)
-        self.platforms_entry.grid(row=5, column=1, padx=5, pady=5)
+        self.platforms_entry.grid(row=5, column=0, padx=5, pady=5)
 
         self.recommend_button.grid(row=6, column=0, columnspan=2, padx=5, pady=10)
 
