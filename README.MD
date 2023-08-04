@@ -15,8 +15,10 @@ Este é um projeto de sistema de recomendação de jogos baseado em dados da pla
 
 2. Instalar as bibliotecas necessárias: pandas, requests, e tkinter (que geralmente já está incluída na biblioteca padrão do Python).
 > Para instalar as bibliotecas, você pode abrir um terminal ou prompt de comando e executar os seguintes comandos:
->
-> `pip install pandas requests`
+
+```python
+pip install pandas requests
+```
 
 ## Arquivos
 
